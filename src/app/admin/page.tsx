@@ -45,8 +45,12 @@ export default async function AdminDashboardPage() {
 
       {/* Charts & Analytics */}
       <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm mb-8">
-        <h2 className="font-bold text-gray-900 mb-4">Revenue Overview (Last 7 Days)</h2>
-        <DashboardCharts data={data.chartData} />
+        <h2 className="font-bold text-gray-900 mb-4">Revenue & Orders Overview (Last 7 Days)</h2>
+        <DashboardCharts 
+          chartData={data.chartData} 
+          statusData={data.statusData} 
+          topProducts={data.topProducts}
+        />
       </div>
 
       {/* Recent Orders Table */}
