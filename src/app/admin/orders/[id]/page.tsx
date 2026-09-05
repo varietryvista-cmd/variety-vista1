@@ -10,12 +10,7 @@ import {
   Truck,
   Package,
   CreditCard,
-  ChevronUp,
-  ChevronDown,
-  Check,
-  X,
   RefreshCw,
-  Truck as TruckIcon,
   DollarSign,
   Clock,
   Printer,
@@ -75,18 +70,6 @@ interface Order {
   timeline: { id: string; status: string; note: string; created_at: string }[];
 }
 
-interface ShiprocketTrackResponse {
-  tracking_data: {
-    shipment_status: number;
-    shipment_track: Array<{
-      date: string;
-      activity: string;
-      location: string;
-      status: string;
-    }>;
-  };
-}
-
 export default function AdminOrderDetailPage({
   params,
 }: {
@@ -99,8 +82,6 @@ export default function AdminOrderDetailPage({
   const [activeTab, setActiveTab] = useState<'details' | 'timeline' | 'shipment' | 'payments'>('details');
   const [shippingLoading, setShippingLoading] = useState(false);
   const [tracking, setTracking] = useState<any>(null);
-  const [shipmentId, setShipmentId] = useState<string | null>(null);
-  const [awbCode, setAwbCode] = useState<string>('');
 
   // Fetch order on mount
   useEffect(() => {
@@ -109,15 +90,9 @@ export default function AdminOrderDetailPage({
         const { id } = await params;
         const response = await fetch(`/api/admin/orders/${id}`);
         if (!response.ok) throw new Error('Failed to fetch order');
-        const _data = await response.json();
+        const data = await response.json();
         if (data.error) throw new Error(data.error);
         setOrder(data);
-        if (data.shiprocket_shipment_id) {
-          setShipmentId(data.shiprocket_shipment_id.toString());
-        }
-        if (data.awb_code) {
-          setAwbCode(data.awb_code);
-        }
       } catch (_e) {
         setError('Failed to load order');
       } finally {
@@ -148,10 +123,10 @@ export default function AdminOrderDetailPage({
       
       if (!response.ok) throw new Error('Failed to create shipment');
       
-      const _data = await response.json();
+      const data = await response.json();
       window.alert(`Shipment created! AWB: ${data.awb_code}`);
       router.refresh();
-    } catch (_e) {
+    } catch (e) {
       window.alert('Failed to create shipment: ' + (e as Error).message);
     } finally {
       setShippingLoading(false);
@@ -170,10 +145,10 @@ export default function AdminOrderDetailPage({
       
       if (!response.ok) throw new Error('Failed to generate AWB');
       
-      const _data = await response.json();
+      const data = await response.json();
       window.alert(`AWB generated: ${data.awb_code}`);
       router.refresh();
-    } catch (_e) {
+    } catch (e) {
       window.alert('Failed to generate AWB: ' + (e as Error).message);
     }
   };
@@ -190,10 +165,10 @@ export default function AdminOrderDetailPage({
       
       if (!response.ok) throw new Error('Failed to schedule pickup');
       
-      const _data = await response.json();
+      // const _data = await response.json(); // Response not used but keeping for consistency
       window.alert('Pickup scheduled successfully!');
       router.refresh();
-    } catch (_e) {
+    } catch (e) {
       window.alert('Failed to schedule pickup: ' + (e as Error).message);
     }
   };
@@ -210,9 +185,9 @@ export default function AdminOrderDetailPage({
       
       if (!response.ok) throw new Error('Failed to track shipment');
       
-      const _data = await response.json();
+      const data = await response.json();
       setTracking(data.tracking_data);
-    } catch (_e) {
+    } catch (e) {
       window.alert('Failed to track shipment: ' + (e as Error).message);
     }
   };
@@ -232,7 +207,7 @@ export default function AdminOrderDetailPage({
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       window.open(url, '_blank');
-    } catch (_e) {
+    } catch (e) {
       window.alert('Failed to generate label: ' + (e as Error).message);
     }
   };
@@ -335,9 +310,6 @@ export default function AdminOrderDetailPage({
                   </div>
                   <div className="divide-y divide-gray-200 p-6">
                     {order.items?.map((item: OrderItem) => {
-                      const product = item.product || item.variant;
-                      const imageUrl = item.variant?.images?.[0]?.image_url || item.product?.images?.[0]?.image_url;
-                      
                       return (
                         <div key={item.id} className="flex gap-4 py-4 first:pt-0 last:pb-0">
                           <div className="w-16 h-20 bg-gray-100 rounded-md relative overflow-hidden shrink-0">

@@ -11,7 +11,6 @@ interface SearchPageProps {
 type FullProduct = Product & { images: ProductImage[]; variants: ProductVariant[] };
 
 // Base query logic for search
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function applySearchToQuery(query: any, searchQuery: string) {
   if (searchQuery.trim()) {
     return query.textSearch('title', searchQuery.trim(), {

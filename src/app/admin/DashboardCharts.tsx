@@ -43,8 +43,7 @@ export default function DashboardCharts({ data }: { data: ChartData[] }) {
             dx={-10}
           />
           <Tooltip 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            formatter={(value: any) => [formatPrice(Number(value) || 0), 'Revenue']}
+            formatter={(value: number | string | readonly (number | string)[] | undefined) => [formatPrice(Number(Array.isArray(value) ? value[0] : value) || 0), 'Revenue']}
             contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
           />
           <Line 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { Loader2, ArrowLeft, X } from 'lucide-react';
 import {
@@ -70,6 +71,7 @@ export function FitFinderModal({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Partial<FitFinderAnswers>>({});
   const [isCalculating, setIsCalculating] = useState(false);
@@ -191,7 +193,7 @@ export function FitFinderModal({
                   ) : (
                     <div className="text-center py-12">
                       <p className="text-secondary-text mb-4">We couldn&apos;t find an exact match, but check out our new arrivals.</p>
-                      <Button onClick={() => { onOpenChange(false); window.location.href='/collections/new-arrivals'; }}>
+                      <Button onClick={() => { onOpenChange(false); router.push('/collections/new-arrivals'); }}>
                         Shop New Arrivals
                       </Button>
                     </div>

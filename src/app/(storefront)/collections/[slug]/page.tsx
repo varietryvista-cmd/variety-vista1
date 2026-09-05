@@ -12,7 +12,6 @@ interface CollectionPageProps {
 type FullProduct = Product & { images: ProductImage[]; variants: ProductVariant[] };
 
 // Base query logic for a collection slug
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function applySlugToQuery(query: any, slug: string) {
   if (slug === 'women') {
     return query.eq('gender', 'women');
