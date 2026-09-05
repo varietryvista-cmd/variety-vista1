@@ -40,6 +40,7 @@ export default function ProductForm({ product }: {
     bestseller: boolean; 
     new_arrival: boolean; 
     featured: boolean;
+    product_category?: string;
     images?: ProductImage[];
     variants?: ProductVariant[];
   } 
@@ -318,7 +319,7 @@ export default function ProductForm({ product }: {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div>
                 <label className="block text-sm font-medium mb-1">Gender</label>
                 <select name="gender" defaultValue={product?.gender || 'men'} className="w-full border-gray-300 rounded-md">
@@ -337,6 +338,18 @@ export default function ProductForm({ product }: {
                   <option value="wide_leg">Wide Leg</option>
                   <option value="mom">Mom</option>
                   <option value="flare">Flare</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Product Category</label>
+                <select name="product_category" defaultValue={product?.product_category || 'jeans'} className="w-full border-gray-300 rounded-md">
+                  <option value="jeans">Jeans</option>
+                  <option value="tshirts">T-Shirts</option>
+                  <option value="jackets">Jackets</option>
+                  <option value="shorts">Shorts</option>
+                  <option value="shirts">Shirts</option>
+                  <option value="accessories">Accessories</option>
+                  <option value="other">Other</option>
                 </select>
               </div>
               <div>

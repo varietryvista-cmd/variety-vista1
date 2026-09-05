@@ -16,6 +16,7 @@ export type PaymentMethod = 'razorpay' | 'cod';
 export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded' | 'cod_pending';
 export type FulfillmentStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'rto';
 export type CouponType = 'percentage' | 'fixed';
+export type ProductCategory = string; // Flexible categories managed via admin panel
 
 // ---- Table Interfaces ----
 
@@ -115,6 +116,7 @@ export interface Product {
   meta_description?: string | null;
   og_image_url?: string | null;
   tags?: string[];
+  product_category?: ProductCategory;
   created_at: string;
   updated_at: string;
 

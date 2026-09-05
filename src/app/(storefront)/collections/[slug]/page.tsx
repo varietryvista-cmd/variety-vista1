@@ -22,6 +22,12 @@ function applySlugToQuery(query: any, slug: string) {
   } else if (slug === 'sale') {
     return query.not('sale_price', 'is', null);
   } else if (slug !== 'all') {
+    // Check if it's a product category first
+    const knownCategories = ['jeans', 'tshirts', 'jackets', 'shorts', 'shirts', 'accessories', 'other'];
+    if (knownCategories.includes(slug)) {
+      return query.eq('product_category', slug);
+    }
+    // Otherwise treat as fit_type (backward compatibility)
     const fitTypeMatch = slug.replace('-', '_');
     return query.eq('fit_type', fitTypeMatch);
   }
