@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Variety Vista — Jeans That Define You
 
-## Getting Started
+Variety Vista is a modern, premium e-commerce storefront for selling high-quality denim. Built with the Next.js App Router, Supabase, Tailwind CSS, and Shadcn/UI, this application provides a blazing fast, SEO-optimized, and highly interactive shopping experience.
 
-First, run the development server:
+## Features
+
+- **App Router & Server Actions**: Fully utilizes Next.js 15+ features for server-side rendering, data fetching, and form mutations.
+- **Supabase Backend**: PostgreSQL database, Authentication (Google, Email/Password), and Row Level Security.
+- **Premium Design System**: Built with Tailwind CSS, Shadcn/UI, and Framer Motion (via `motion/react`) for fluid animations.
+- **Full E-Commerce Flow**: Cart management, checkout, wishlist, and Razorpay/Shiprocket integrations.
+- **Admin Dashboard**: Comprehensive CMS to manage products, variants, collections, and orders.
+- **SEO Optimized**: Static sitemaps, JSON-LD structured data, dynamic OpenGraph images.
+- **Accessibility**: ARIA-compliant UI components and keyboard navigation.
+
+## Tech Stack
+
+- **Framework**: Next.js (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Shadcn UI (Radix Primitives)
+- **Animations**: Motion (Framer Motion)
+- **Database & Auth**: Supabase
+- **Validation**: Zod
+- **Analytics**: Vercel Analytics
+
+## Local Development
+
+### Prerequisites
+
+1. Node.js (v18 or higher)
+2. Supabase CLI (for local database development)
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/varietyvista.git
+cd varietyvista
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Environment Variables
+
+Copy the example environment file and fill in your Supabase credentials:
+
+```bash
+cp .env.example .env.local
+```
+
+### 4. Database Setup
+
+The project uses Supabase. To run the database locally:
+
+```bash
+supabase start
+```
+This will automatically apply all migrations in the `supabase/migrations` folder and seed the database with initial products.
+
+### 5. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Architecture
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/app/(storefront)`: The customer-facing shop interface.
+- `src/app/(auth)`: Login, signup, and password recovery.
+- `src/app/admin`: The protected merchant dashboard.
+- `src/components/ui`: Reusable design system primitives.
+- `src/components/storefront`: Higher-level components for the shop.
+- `src/lib`: Utility functions, Supabase clients, and constants.
+- `supabase/migrations`: SQL files defining the database schema and RLS policies.
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions on deploying this application to Vercel and linking a production Supabase project.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built with ❤️ for denim lovers.
