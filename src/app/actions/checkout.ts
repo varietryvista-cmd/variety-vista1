@@ -4,6 +4,7 @@ import { createServerClient } from '@/lib/supabase';
 import Razorpay from 'razorpay';
 import { z } from 'zod';
 import { checkoutSchema, type CheckoutFormData } from '@/lib/checkout-validation';
+import { sendOrderConfirmationEmail } from '@/lib/email';
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID || 'dummy_key',
@@ -177,6 +178,49 @@ export async function createCheckoutOrder(formData: CheckoutFormData) {
 
     // Clear the cart
     await supabase.from('cart_items').delete().eq('cart_id', cartData.id);
+
+    // 5b. Fetch complete order data for confirmation email
+    const { data: fullOrder } = await supabase
+      .from('orders')
+      .select('*, items:order_items(*, variant:product_variants(*), product:products(*, images:product_images(*)))')
+      .eq('id', newOrder.id)
+      .single();
+
+    // Send order confirmation email (non-blocking)
+    if (fullOrder) {
+      const emailData = {
+        orderNumber: fullOrder.order_number,
+        customerName: `${validatedData.firstName} ${validatedData.lastName}`,
+        email: validatedData.email,
+        items: (fullOrder.items || []).map((item: any) => ({
+          title: item.title,
+          quantity: item.quantity,
+          unitPrice: item.unit_price,
+          lineTotal: item.line_total,
+          size: item.waist_size ? `W${item.waist_size}${item.inseam_length ? ` L${item.inseam_length}` : ''}` : undefined,
+          imageUrl: item.product?.images?.[0]?.image_url,
+        })),
+        subtotal: fullOrder.subtotal,
+        discountAmount: fullOrder.discount_amount,
+        shippingCost: fullOrder.shipping_cost,
+        total: fullOrder.total,
+        shippingAddress: {
+          firstName: validatedData.firstName,
+          lastName: validatedData.lastName,
+          address: validatedData.address,
+          city: validatedData.city,
+          state: validatedData.state,
+          pincode: validatedData.pincode,
+          phone: validatedData.phone,
+        },
+        paymentMethod: validatedData.paymentMethod,
+      };
+
+      // Fire and forget - don't block checkout if email fails
+      sendOrderConfirmationEmail(emailData).catch(err => {
+        console.error('Order confirmation email failed:', err);
+      });
+    }
 
     // 6. Handle Payment Method Specifics
     if (validatedData.paymentMethod === 'razorpay') {
